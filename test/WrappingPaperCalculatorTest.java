@@ -1,33 +1,12 @@
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class WrappingPaperCalculatorTest {
-
-    private static class WrapperPaperCalculator {
-        private final int totalArea;
-        private final int slackRequired;
-
-        public WrapperPaperCalculator(int width, int length, int height) {
-            this.totalArea = 2 * (width * length) + 2 * (width * height) + 2 * (length * height);
-            this.slackRequired = Math.min(width * length, Math.min(width*height, length*height));
-        }
-
-        public int totalArea() {
-            return totalArea;
-        }
-
-        public int slackRequired() {
-            return slackRequired;
-        }
-    }
 
     @Test
     public void wrapperPaperCalculatorCanCalculateTheAreaOfWrappingPaperRequired()
@@ -95,31 +74,4 @@ public class WrappingPaperCalculatorTest {
     }
 
 
-    private static class WrapperPaperCalculatorGenerator {
-        public interface GeneratorFunctor
-        {
-            void generatedWrappingPaperCalculator(WrapperPaperCalculator calculator);
-        }
-        private final BufferedReader bufferedReader;
-
-        public WrapperPaperCalculatorGenerator(InputStream stream) {
-            this.bufferedReader = new BufferedReader(new InputStreamReader(stream));
-        }
-
-        public void forEachWrappingPaperCalculator(GeneratorFunctor generatorFunctor)
-        {
-            try {
-                while(bufferedReader.ready()) {
-                    String input = bufferedReader.readLine();
-                    String[] dimensions = input.split("x");
-                    int width = Integer.parseInt(dimensions[0]);
-                    int length = Integer.parseInt(dimensions[1]);
-                    int height = Integer.parseInt(dimensions[2]);
-                    generatorFunctor.generatedWrappingPaperCalculator(new WrapperPaperCalculator(width, length, height));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
