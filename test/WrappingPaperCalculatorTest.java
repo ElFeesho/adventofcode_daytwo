@@ -6,12 +6,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class WrappingPaperCalculatorTest {
 
     private class WrapperPaperCalculator {
-        public WrapperPaperCalculator(int width, int length, int height) {
+        private final int totalArea;
 
+        public WrapperPaperCalculator(int width, int length, int height) {
+            this.totalArea = 2 * (width * length) + 2 * (width * height) + 2 * (length * height);
         }
 
         public int totalArea() {
-            return 0;
+            return totalArea;
         }
     }
 
