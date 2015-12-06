@@ -1,6 +1,9 @@
 import org.junit.Test;
 
+import java.io.InputStream;
+
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class WrappingPaperCalculatorTest {
@@ -54,6 +57,39 @@ public class WrappingPaperCalculatorTest {
         assertThat(calculator.slackRequired(), is(1));
     }
 
+    @Test
+    public void wrappingPaperCalculatorGenerator_canCreateWrappingPaperCalculatorsFromAStream()
+    {
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("single_input.txt");
+        assertThat(resourceAsStream, is(notNullValue()));
+
+        WrapperPaperCalculatorGenerator generator = new WrapperPaperCalculatorGenerator(resourceAsStream);
+        final int[] capturedTotalArea = new int[1];
+        final int[] capturedSlackArea = new int[1];
+        generator.forEachWrappingPaperCalculator((wrappingPaperCalculator)->{
+            capturedTotalArea[0] = wrappingPaperCalculator.totalArea();
+            capturedSlackArea[0] = wrappingPaperCalculator.slackRequired();
+        });
+
+        assertThat(capturedTotalArea[0], is(52));
+        assertThat(capturedSlackArea[0], is(6));
+    }
 
 
+    private static class WrapperPaperCalculatorGenerator {
+        public interface GeneratorFunctor
+        {
+            void generatedWrappingPaperCalculator(WrapperPaperCalculator calculator);
+        }
+        private final InputStream inputStream;
+
+        public WrapperPaperCalculatorGenerator(InputStream stream) {
+            this.inputStream = stream;
+        }
+
+        public void forEachWrappingPaperCalculator(GeneratorFunctor generatorFunctor)
+        {
+
+        }
+    }
 }
