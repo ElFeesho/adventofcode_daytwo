@@ -43,6 +43,17 @@ public class WrappingPaperCalculatorTest {
         assertThat(calculator.slackRequired(), is(6));
     }
 
+    @Test
+    public void secondTestCaseWorks()
+    {
+        int width = 1;
+        int height = 1;
+        int length = 10;
+        WrapperPaperCalculator calculator = new WrapperPaperCalculator(width, length, height);
+        assertThat(calculator.totalArea(), is(42));
+        assertThat(calculator.slackRequired(), is(1));
+    }
+
 
 
 }
