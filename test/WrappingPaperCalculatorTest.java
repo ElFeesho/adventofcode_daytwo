@@ -10,10 +10,15 @@ public class WrappingPaperCalculatorTest {
 
         public WrapperPaperCalculator(int width, int length, int height) {
             this.totalArea = 2 * (width * length) + 2 * (width * height) + 2 * (length * height);
+
         }
 
         public int totalArea() {
             return totalArea;
+        }
+
+        public int slackRequired() {
+            return 0;
         }
     }
 
@@ -25,6 +30,16 @@ public class WrappingPaperCalculatorTest {
         int length = 4;
         WrapperPaperCalculator calculator = new WrapperPaperCalculator(width, length, height);
         assertThat(calculator.totalArea(), is(52));
+    }
+
+    @Test
+    public void wrapperPaperCalculatorCanCalculateTheAreaOfSlackPaperRequired()
+    {
+        int width = 2;
+        int height = 3;
+        int length = 4;
+        WrapperPaperCalculator calculator = new WrapperPaperCalculator(width, length, height);
+        assertThat(calculator.slackRequired(), is(6));
     }
 
 
