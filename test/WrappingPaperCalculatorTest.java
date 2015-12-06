@@ -78,6 +78,22 @@ public class WrappingPaperCalculatorTest {
         assertThat(capturedSlackArea[0], is(6));
     }
 
+    @Test
+    public void wrappingPaperCalculatorGenerator_canCreateWrappingPaperCalculatorsFromAStream_andCanBeUsedToSumTotalArea()
+    {
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("two_inputs.txt");
+        assertThat(resourceAsStream, is(notNullValue()));
+
+        WrapperPaperCalculatorGenerator generator = new WrapperPaperCalculatorGenerator(resourceAsStream);
+        final int[] capturedTotalAreaAndSlack = new int[1];
+
+        generator.forEachWrappingPaperCalculator((wrappingPaperCalculator)->{
+            capturedTotalAreaAndSlack[0] += wrappingPaperCalculator.totalArea() + wrappingPaperCalculator.slackRequired();
+        });
+
+        assertThat(capturedTotalAreaAndSlack[0], is(58+43));
+    }
+
 
     private static class WrapperPaperCalculatorGenerator {
         public interface GeneratorFunctor
@@ -93,12 +109,14 @@ public class WrappingPaperCalculatorTest {
         public void forEachWrappingPaperCalculator(GeneratorFunctor generatorFunctor)
         {
             try {
-                String input = bufferedReader.readLine();
-                String[] dimensions = input.split("x");
-                int width = Integer.parseInt(dimensions[0]);
-                int length = Integer.parseInt(dimensions[1]);
-                int height = Integer.parseInt(dimensions[2]);
-                generatorFunctor.generatedWrappingPaperCalculator(new WrapperPaperCalculator(width, length, height));
+                while(bufferedReader.ready()) {
+                    String input = bufferedReader.readLine();
+                    String[] dimensions = input.split("x");
+                    int width = Integer.parseInt(dimensions[0]);
+                    int length = Integer.parseInt(dimensions[1]);
+                    int height = Integer.parseInt(dimensions[2]);
+                    generatorFunctor.generatedWrappingPaperCalculator(new WrapperPaperCalculator(width, length, height));
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
