@@ -1,6 +1,9 @@
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -8,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class WrappingPaperCalculatorTest {
 
-    private class WrapperPaperCalculator {
+    private static class WrapperPaperCalculator {
         private final int totalArea;
         private final int slackRequired;
 
@@ -81,15 +84,24 @@ public class WrappingPaperCalculatorTest {
         {
             void generatedWrappingPaperCalculator(WrapperPaperCalculator calculator);
         }
-        private final InputStream inputStream;
+        private final BufferedReader bufferedReader;
 
         public WrapperPaperCalculatorGenerator(InputStream stream) {
-            this.inputStream = stream;
+            this.bufferedReader = new BufferedReader(new InputStreamReader(stream));
         }
 
         public void forEachWrappingPaperCalculator(GeneratorFunctor generatorFunctor)
         {
-
+            try {
+                String input = bufferedReader.readLine();
+                String[] dimensions = input.split("x");
+                int width = Integer.parseInt(dimensions[0]);
+                int length = Integer.parseInt(dimensions[1]);
+                int height = Integer.parseInt(dimensions[2]);
+                generatorFunctor.generatedWrappingPaperCalculator(new WrapperPaperCalculator(width, length, height));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
