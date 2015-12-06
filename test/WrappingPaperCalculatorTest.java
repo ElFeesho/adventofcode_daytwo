@@ -45,7 +45,7 @@ public class WrappingPaperCalculatorTest {
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("single_input.txt");
         assertThat(resourceAsStream, is(notNullValue()));
 
-        WrapperPaperCalculatorGenerator generator = new WrapperPaperCalculatorGenerator(resourceAsStream);
+        CalculatorGenerator<WrapperPaperCalculator> generator = new CalculatorGenerator<>(resourceAsStream, (width, length, height) -> new WrapperPaperCalculator(width, length, height));
         final int[] capturedTotalArea = new int[1];
         final int[] capturedSlackArea = new int[1];
         generator.forEachWrappingPaperCalculator((wrappingPaperCalculator)->{
@@ -63,7 +63,7 @@ public class WrappingPaperCalculatorTest {
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("two_inputs.txt");
         assertThat(resourceAsStream, is(notNullValue()));
 
-        WrapperPaperCalculatorGenerator generator = new WrapperPaperCalculatorGenerator(resourceAsStream);
+        CalculatorGenerator<WrapperPaperCalculator> generator = new CalculatorGenerator<>(resourceAsStream, (width, length, height) -> new WrapperPaperCalculator(width, length, height));
         final int[] capturedTotalAreaAndSlack = new int[1];
 
         generator.forEachWrappingPaperCalculator((wrappingPaperCalculator)->{
